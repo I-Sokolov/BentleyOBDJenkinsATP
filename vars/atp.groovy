@@ -32,7 +32,7 @@ def call (boolean watchCoverage, boolean resetATP, boolean updateATP, String tag
             echo 'Init coverage data'
             env.ATP_OPENCPPCOVERAGE = env.WORKSPACE+'\\ATP_coverage\\'
             bat "IF EXIST ${env.ATP_OPENCPPCOVERAGE} rd  ${env.ATP_OPENCPPCOVERAGE} /s /q"
-            bat "mkdir ${env.ATP_OPENCPPCOVERAGE}"
+            bat "mkdir ${env.ATP_OPENCPPCOVERAGE}" 
             }
 
         //
