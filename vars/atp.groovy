@@ -36,7 +36,7 @@ def call (boolean watchCoverage, boolean resetATP, boolean updateATP, String tag
             }
 
         //
-        bat 'runATP.bat'
+        bat 'runATP.bat' 
         
         //
         if (watchCoverage) {
