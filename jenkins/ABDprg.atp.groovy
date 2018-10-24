@@ -33,7 +33,7 @@ pipeline {
             }
         }
     }
-   
+/*   
     post {
         always {
             mail  to: "${env.DEFAULT_RECIPIENTS}",
@@ -41,5 +41,5 @@ pipeline {
                   body: "Please see report ${env.BUILD_URL}"                           
         }
     }
-    
+  */  
 }
