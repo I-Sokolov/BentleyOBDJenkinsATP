@@ -1,6 +1,6 @@
 
 //def call (script, String name = 'human')
-def call (boolean watchCoverage)
+def call (boolean watchCoverage, boolean resetATP, boolean updateATP, String tagATP)
  {
     script {
         if (!env.SRCTREE_NAME) {
@@ -10,15 +10,24 @@ def call (boolean watchCoverage)
             }
 
         //---------------------------------------------------------------------------
-        //
-        echo '**************************** ATP reset and update ******************'
-        bat 'resetATP.bat'
-        bat 'updateATP.bat'
+        //        
+        if (resetATP) {
+            echo '**************************** ATP reset ******************'
+            bat 'resetATP.bat'
+        }
+
+        if (updateATP) {
+            echo '**************************** ATP update, tag: ' + tagATP
+            if (tagATP != '') {
+                bat 'tagATP ' + tagATP
+            }
+            bat 'updateATP.bat ' + tagATP
+        }
 
         //-----------------------------------------------------------------------------
         //
         echo '**************************** ATP run #1 *****************************'
-
+        
         if (watchCoverage) {
             echo 'Init coverage data'
             env.ATP_OPENCPPCOVERAGE = env.WORKSPACE+'\\ATP_coverage\\'
@@ -28,7 +37,7 @@ def call (boolean watchCoverage)
 
         //
         bat 'runATP.bat'
-
+        
         //
         if (watchCoverage) {
             bat "ATPhelper.bat OpenCppCoverageMerge ${env.ATP_OPENCPPCOVERAGE}OpenCPPCoverage.xml"
@@ -39,11 +48,14 @@ def call (boolean watchCoverage)
 
         //-----------------------------------------------------------------------------
         //
-        echo '**************************** ATP run #2 *****************************'
-        bat 'runATP.bat'
-        echo '**************************** ATP run #3 *****************************'
-        bat 'runATP.bat'
         
+        if (resetATP) {
+            echo '**************************** ATP run #2 *****************************'
+            bat 'runATP.bat'
+            echo '**************************** ATP run #3 *****************************'
+            bat 'runATP.bat'
+        }
+                
         //-----------------------------------------------------------------------------
         //
         echo '**************************** ATP check errors **********************'
