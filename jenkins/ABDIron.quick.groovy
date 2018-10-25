@@ -14,9 +14,9 @@ pipeline {
         booleanParam(name: 'wantBootstrap', defaultValue: false, description: 'Run bootstrap stange (initial build)')
         booleanParam(name: 'wantPull', defaultValue: false, description: 'Update ABD sources')
         booleanParam(name: 'wantBuild', defaultValue: false, description: 'Rebuild ABD')
-        booleanParam(name: 'wantCoverage', defaultValue: false, description: 'ATP generate coverage')
         booleanParam(name: 'wantResetATP', defaultValue: false, description: 'clean ATP results and run full cycle')
         booleanParam(name: 'wantUpdateATP', defaultValue: false, description: 'update ATP database')
+        choice (name: 'coverage', choices: ['NoCoverage', 'AppendCoverage', 'RewriteCoverage'], description: 'Select coverage mode')
         booleanParam(name: 'wantShutdown', defaultValue: false, description: 'hibernate the station when finished')
     }
 
@@ -77,7 +77,7 @@ pipeline {
         //
         stage ('ATP'){
             steps {
-                atp params.wantCoverage, params.wantResetATP, params.wantUpdateATP, ''
+                atp params.coverage, params.wantResetATP, params.wantUpdateATP, ''
             }
         }
     }

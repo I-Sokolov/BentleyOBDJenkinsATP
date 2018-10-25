@@ -50,7 +50,7 @@ pipeline {
         //
         stage ('run ATP tests') {
             steps {
-                atp false, !params.fastRun, !params.fastRun, params.tagATP
+                atp 'NoCoverage', !params.fastRun, !params.fastRun, params.tagATP
             }
         }
     }

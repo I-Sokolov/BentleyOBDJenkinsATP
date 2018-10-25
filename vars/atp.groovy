@@ -1,6 +1,6 @@
 
 //def call (script, String name = 'human')
-def call (boolean watchCoverage, boolean resetATP, boolean updateATP, String tagATP)
+def call (String coverageMode, boolean resetATP, boolean updateATP, String tagATP)
  {
     script {
         if (!env.SRCTREE_NAME) {
@@ -28,9 +28,11 @@ def call (boolean watchCoverage, boolean resetATP, boolean updateATP, String tag
         //
         echo '**************************** ATP run #1 *****************************'
         
-        if (watchCoverage) {
-            echo 'Init coverage data'
+        if (coverageMode != 'NoCoverage') {
             env.ATP_OPENCPPCOVERAGE = env.WORKSPACE+'\\ATP_coverage\\'
+            }
+        if (coverageMode == 'RewriteCoverage') {
+            echo 'Init coverage data'
             bat "IF EXIST ${env.ATP_OPENCPPCOVERAGE} rd  ${env.ATP_OPENCPPCOVERAGE} /s /q"
             bat "mkdir ${env.ATP_OPENCPPCOVERAGE}" 
             }
@@ -39,7 +41,7 @@ def call (boolean watchCoverage, boolean resetATP, boolean updateATP, String tag
         bat 'runATP.bat' 
         
         //
-        if (watchCoverage) {
+        if (coverageMode != 'NoCoverage') {
             bat "ATPhelper.bat OpenCppCoverageMerge ${env.ATP_OPENCPPCOVERAGE}OpenCPPCoverage.xml"
             step $class: 'CoberturaPublisher', coberturaReportFile: 'ATP_coverage\\OpenCPPCoverage.xml'             
         }
