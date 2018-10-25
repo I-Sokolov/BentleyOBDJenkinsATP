@@ -1,2 +1,3 @@
 call %~dp0sharedshell.bat
-bb build --tmrbuild --noprompt
+@echo on
+bb %JENKINS_BB_BUILD_PARAMS% build --tmrbuild --noprompt
