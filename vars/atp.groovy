@@ -43,12 +43,12 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
 
         //
         if (coverageReportType == 'Cobertura') {
-            bat "ATPhelper.bat OpenCppCoverageMerge cobertura:${env.ATP_OPENCPPCOVERAGE}OpenCPPCoverage.xml"
+            bat "ATPhelper.bat OpenCppCoverageMerge cobertura ${env.ATP_OPENCPPCOVERAGE}OpenCPPCoverage.xml"
             step $class: 'CoberturaPublisher', coberturaReportFile: 'ATP_coverage\\OpenCPPCoverage.xml'             
         }
         else if (coverageReportType == 'Html') {
-            bat "ATPhelper.bat OpenCppCoverageMerge html:${env.ATP_OPENCPPCOVERAGE}OpenCPPCoverage.htm"
-            archiveArtifacts 'ATP_coverage/OpenCPPCoverage.htm/*'        
+            bat "ATPhelper.bat OpenCppCoverageMerge html ${env.ATP_OPENCPPCOVERAGE}OpenCPPCoverage.htm"
+            archiveArtifacts 'ATP_coverage\\OpenCPPCoverage.htm.zip'
         }
 
         env.ATP_OPENCPPCOVERAGE = ''
@@ -72,7 +72,7 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
         }
         else if (status == 1) {
             currentBuild.result = 'UNSTABLE'
-            archiveArtifacts 'ATP_ErrorLogs/**'
+            archiveArtifacts 'ATP_ErrorLogs/*'
         }
         else {
             echo "Checking for errors fails with status = " + status
