@@ -1,3 +1,11 @@
+/*--------------------------------------------------------------------------------------+
+|
+|     $Source: jenkins/ABDprg.atp.groovy $
+|
+|  $Copyright: (c) 2018 Bentley Systems, Incorporated. All rights reserved. $
+|
++--------------------------------------------------------------------------------------*/
+
 @Library('atpLib') _
 
 pipeline {
@@ -34,7 +42,7 @@ pipeline {
 
         //**************************************************************************
         //
-        stage ('pull ATP script'){
+        stage ('pull script'){
             steps {
                 script {
                     if (!params.fastRun) {
@@ -50,9 +58,41 @@ pipeline {
 
         //**************************************************************************
         //
+        /* 
+        //as single stage
         stage ('run ATP tests') {
             steps {
-                atp 'NoCoverage', 'NoReport', !params.fastRun, !params.fastRun, params.atpTag, params.atpBranch, params.atpTag
+                atp 'NoCoverage', 'NoReport', !params.fastRun, !params.fastRun, params.atpTag, params.atpBranch, params.atpPart
+            }
+        }
+        */
+        //in multi stages
+
+        stage ('prepare tests') {
+            steps {                
+                script { atp.prepare (!params.fastRun, !params.fastRun, params.atpTag, params.atpBranch) }
+            }
+        }
+
+        stage ('run#1') {
+            steps {
+                script { atp.run1 ('NoCoverage', 'NoReport', params.atpPart) }
+            }
+        }
+
+        stage ('run#2') {
+            steps {
+                script {
+                    if (!params.fastRun) {
+                        atp.run2 (params.atpPart)
+                    }
+                }
+            }
+        }
+
+        stage ('check result') {
+            steps {
+                script { atp.checkResult () }
             }
         }
     }

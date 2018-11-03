@@ -1,6 +1,5 @@
 call %~dp0sharedshell.bat
-
-echo ************************ Setting CVS ATP tag %1 ***********************
+@echo on
 
 pushd %SrcRoot%Building\atp\building\development\
 

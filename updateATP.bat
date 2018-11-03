@@ -1,11 +1,8 @@
 call %~dp0sharedshell.bat
+@echo on
 
 set GETTAG=%1
 if .%1==. set GETTAG=HEAD
-
-@echo .
-@echo ************************* Updating ATP CVS from %GETTAG% **************
-@echo on
 
 pushd %SrcRoot%Building\
 

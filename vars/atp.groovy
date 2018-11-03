@@ -1,7 +1,17 @@
+/*--------------------------------------------------------------------------------------+
+|
+|     $Source: vars/atp.groovy $
+|
+|  $Copyright: (c) 2018 Bentley Systems, Incorporated. All rights reserved. $
+|
++--------------------------------------------------------------------------------------*/
 
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
 
-def call (String coverageMode, String coverageReportType, boolean resetATP, boolean updateATP, String atpTag, String atpBranch, String atpPart)
- {
+def prepare (boolean resetATP, boolean updateATP, String atpTag, String atpBranch)
+{
     script {
         if (!env.SRCTREE_NAME) {
             echo "Set SRCTREE_NAME environment variable"            
@@ -29,9 +39,15 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
                 bat 'updateATP.bat ' + atpBranch            
             }
         }
+    }
+}
 
-        //-----------------------------------------------------------------------------
-        //
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+def run1 (String coverageMode, String coverageReportType, String atpPart)
+{
+    script {
         echo '**************************** ATP run #1 *****************************'
         
         if (coverageMode != 'NoCoverage') {
@@ -58,19 +74,28 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
         }
 
         env.ATP_OPENCPPCOVERAGE = ''
+    }
+}
 
-        //-----------------------------------------------------------------------------
-        //
-        
-        if (resetATP) {
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+def run2 (String atpPart)
+{
+    script {
             echo '**************************** ATP run #2 *****************************'
             bat 'runATP.bat ' + atpPart
             echo '**************************** ATP run #3 *****************************'
             bat 'runATP.bat ' + atpPart
-        }
-                
-        //-----------------------------------------------------------------------------
-        //
+    }
+}
+
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+def checkResult ()
+{
+    script {
         echo '**************************** ATP check errors **********************'
         def status = bat script: 'ATPhelper.bat GetAtpLogs ATP_ErrorLogs', returnStatus: true       
         if (status == 0) {
@@ -84,6 +109,23 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
             echo "Checking for errors fails with status = " + status
             throw new hudson.AbortException("Checking for errors fails with status = " + status)
         }
+    }
+}
 
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+def call (String coverageMode, String coverageReportType, boolean resetATP, boolean updateATP, String atpTag, String atpBranch, String atpPart)
+ {
+    script {
+        prepare (resetATP, updateATP, atpTag, atpBranch);
+        
+        run1 (coverageMode, coverageReportType, atpPart);
+
+        if (resetATP) {        
+            run2 (atpPart);
+            }
+
+        checkResult ();                
     }
 }
