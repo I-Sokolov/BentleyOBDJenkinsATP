@@ -9,7 +9,9 @@ pipeline {
     }
 
     parameters {
-        string(name: 'tagATP', defaultValue: '', description: 'Tag ATP before updating (black to get from tip)')
+        string(name: 'atpTag', defaultValue: '', description: 'ATP tag')
+        string(name: 'atpBranch', defaultValue: '', description: 'ATP branch (specify both tag and branch to set tag)')
+        string(name: 'atpPart', defaultValue: '', description: 'ATP part to run (blank to run all)')
         booleanParam(name: 'fastRun', defaultValue: false, description: 'Only run one ATP cicle (no update and iterations)')
     }
 
@@ -50,7 +52,7 @@ pipeline {
         //
         stage ('run ATP tests') {
             steps {
-                atp 'NoCoverage', 'NoReport', !params.fastRun, !params.fastRun, params.tagATP
+                atp 'NoCoverage', 'NoReport', !params.fastRun, !params.fastRun, params.atpTag, params.atpBranch, params.atpTag
             }
         }
     }

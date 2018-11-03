@@ -78,7 +78,7 @@ pipeline {
         //
         stage ('ATP'){
             steps {
-                atp params.coverageMode, params.coverageReport, params.wantResetATP, params.wantUpdateATP, ''
+                atp params.coverageMode, params.coverageReport, params.wantResetATP, params.wantUpdateATP, '', '', ''
             }
         }
     }

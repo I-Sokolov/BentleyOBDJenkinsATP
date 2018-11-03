@@ -1,6 +1,6 @@
 
-//def call (script, String name = 'human')
-def call (String coverageMode, String coverageReportType, boolean resetATP, boolean updateATP, String tagATP)
+
+def call (String coverageMode, String coverageReportType, boolean resetATP, boolean updateATP, String atpTag, String atpBranch, String atpPart)
  {
     script {
         if (!env.SRCTREE_NAME) {
@@ -16,12 +16,18 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
             bat 'resetATP.bat'
         }
 
-        if (updateATP) {
-            echo '**************************** ATP update, tag: ' + tagATP
-            if (tagATP != '') {
-                bat 'tagATP ' + tagATP
+        if (updateATP) {            
+            if (atpTag != '' && atpBranch != '') {
+                echo '**************************** ATP set tag *********'
+                bat 'atpTag ' + atrBranch + ' ' + atpTag
             }
-            bat 'updateATP.bat ' + tagATP
+            echo '**************************** ATP update ********'
+            if (atpTag != '') {
+                bat 'updateATP.bat ' + atpTag
+            }
+            else {
+                bat 'updateATP.bat ' + atpBranch            
+            }
         }
 
         //-----------------------------------------------------------------------------
@@ -38,7 +44,7 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
             }
 
         if (coverageMode != 'OnlyReportCoverage' || resetATP) {
-            bat 'runATP.bat' 
+            bat 'runATP.bat ' + atpPart 
         }
 
         //
@@ -58,9 +64,9 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
         
         if (resetATP) {
             echo '**************************** ATP run #2 *****************************'
-            bat 'runATP.bat'
+            bat 'runATP.bat ' + atpPart
             echo '**************************** ATP run #3 *****************************'
-            bat 'runATP.bat'
+            bat 'runATP.bat ' + atpPart
         }
                 
         //-----------------------------------------------------------------------------
