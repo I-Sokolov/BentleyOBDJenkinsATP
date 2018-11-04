@@ -21,6 +21,7 @@ pipeline {
         string(name: 'atpBranch', defaultValue: '', description: 'ATP branch (specify both tag and branch to set tag)')
         string(name: 'atpPart', defaultValue: '', description: 'ATP part to run (blank to run all)')
         booleanParam(name: 'fastRun', defaultValue: false, description: 'Only run one ATP cicle (no update and iterations)')
+        booleanParam(name: 'shutDown', defaultValue: true, description: 'Hybernate as finished')
     }
 
     stages {        
@@ -108,6 +109,11 @@ pipeline {
                 catch (exc) {
                     echo 'Failed to send email: ' + exc
                 }
+
+                if (params.shutDown) {
+                    bat 'shutdown /h'
+                }
+                
             }
         }
     }
