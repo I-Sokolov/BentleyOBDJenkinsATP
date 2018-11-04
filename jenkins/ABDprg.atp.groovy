@@ -17,8 +17,8 @@ pipeline {
     }
 
     parameters {
-        string(name: 'atpTag', defaultValue: '', description: 'ATP tag')
-        string(name: 'atpBranch', defaultValue: '', description: 'ATP branch (specify both tag and branch to set tag)')
+        string(name: 'atpTag',    defaultValue: "${atp.getParam('atpTag',    'ADBprg.atp', '')}", description: 'ATP tag')
+        string(name: 'atpBranch', defaultValue: "${atp.getParam('atpBranch', 'ADBprg.atp', '')}", description: 'ATP branch (specify both tag and branch to set tag)')
         string(name: 'atpPart', defaultValue: '', description: 'ATP part to run (blank to run all)')
         booleanParam(name: 'fastRun', defaultValue: false, description: 'Only run one ATP cicle (no update and iterations)')
         booleanParam(name: 'shutDown', defaultValue: true, description: 'Hybernate as finished')
@@ -30,6 +30,12 @@ pipeline {
         stage ('bootstrap'){
             steps {
                 script {
+                    atp.saveParam('atpTag',    'ADBprg.atp', params.atpTag)
+                    atp.saveParam('atpBranch', 'ADBprg.atp', params.atpBranch)
+
+                    echo 'PARAMETERS:'
+                    print params
+
                     if (!params.fastRun) {
                         //clean Hg repos (before switch to buildingToday)
                         bat 'bootstrap.bat BuildingIron'
@@ -77,7 +83,8 @@ pipeline {
 
         stage ('run#1') {
             steps {
-                script { atp.run1 ('NoCoverage', 'NoReport', params.atpPart) }
+                echo 'Run1'
+                //script { atp.run1 ('NoCoverage', 'NoReport', params.atpPart) }
             }
         }
 

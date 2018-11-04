@@ -5,6 +5,7 @@
 |  $Copyright: (c) 2018 Bentley Systems, Incorporated. All rights reserved. $
 |
 +--------------------------------------------------------------------------------------*/
+import java.io.File
 
 //--------------------------------------------------------------------------------------
 //                            Igor.Sokolov                                     2018/11
@@ -128,4 +129,81 @@ def call (String coverageMode, String coverageReportType, boolean resetATP, bool
 
         checkResult ();                
     }
+}
+
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+def getSaveParamFile (String name, String job)
+{
+script {
+    try {
+        //http://www.tutorialspoint.com/groovy/groovy_file_io.htm
+        
+        String currentDir = new File(".").getAbsolutePath()
+        String paramDir = currentDir + "\\~Jenkins.Saved.Params"
+
+        def dir = new File(paramDir)
+        dir.mkdir()
+
+        String paramFile = paramDir + "\\" + job + "." + name + ".txt"
+        return paramFile    
+    }
+    catch (ex) {
+        echo "================= Failure in getSaveParamFile ======== "
+        print ex
+        return null
+    }
+}
+}
+
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+
+def saveParam (String name, String jobName, value)
+{
+    script {
+        String paramFile  = getSaveParamFile (name, jobName)
+
+        try {
+            File file = new File(paramFile)
+
+            if (file.exists()) {
+                file.delete()
+            }
+
+            file << value             
+
+            echo "Save parameter " + name + "=" + value
+        }
+        catch (ex) {
+            echo '********************* Faile to save param ' + name + ": "  
+            print ex
+        }
+    }
+}
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+
+def getParam (String name, String jobName, val)
+{
+    script {
+        //http://www.tutorialspoint.com/groovy/groovy_file_io.htm
+        
+        String paramFile  = getSaveParamFile (name, jobName)
+        
+        try {
+            File file = new File(paramFile) 
+            val = file.text 
+            echo "Read saved parameter " + name + "=" + val
+        }
+        catch (ex) {
+        }
+
+        saveParam (name, jobName, val)
+
+        return val
+    }    
 }
