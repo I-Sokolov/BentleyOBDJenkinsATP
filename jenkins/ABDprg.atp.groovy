@@ -12,6 +12,7 @@ pipeline {
     agent any
     environment{
        ABD_PATH	       = 'C:\\Program Files\\Bentley\\AECOsim CONNECT Edition\\AECOsimBuildingDesigner\\'
+       PRG             = '1'
        SRCTREE_NAME    = 'ABD_prg'
        BUILDSTRATEGY   = 'Building'
     }
