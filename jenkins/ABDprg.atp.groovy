@@ -31,6 +31,8 @@ pipeline {
         stage ('bootstrap'){
             steps {
                 script {
+                    atp.verifyParams (params.atpTag, params.atpBranch)
+
                     atp.saveParam('atpTag',    'ADBprg.atp', params.atpTag)
                     atp.saveParam('atpBranch', 'ADBprg.atp', params.atpBranch)
 

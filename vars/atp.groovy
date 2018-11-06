@@ -11,15 +11,31 @@ import java.io.File
 //                            Igor.Sokolov                                     2018/11
 //--------------------------------------------------------------------------------------
 
-def prepare (boolean resetATP, boolean updateATP, String atpTag, String atpBranch)
+def verifyParams (String atpTag, String atpBranch)
 {
     script {
         if (!env.SRCTREE_NAME) {
-            echo "Set SRCTREE_NAME environment variable"            
-            currentBuild.result = 'UNSTABLE'
-            return
+            error "SRCTREE_NAME environment variable is not set"            
             }
 
+        if (atpBranch.length() > 0) {
+            if (atpTag.length() == 0) {
+                error "ERROR: atp tag is not specified, while atpBranch=" + atpBranch
+            } 
+            if (!atpBranch.startsWith ('-r') && !atpBranch.startsWith ('-D')) {
+                error "ERROR: atp branch should start with -r or -D but atpBranch=" + atpBranch                    
+            }
+        }
+    }
+}
+
+//--------------------------------------------------------------------------------------
+//                            Igor.Sokolov                                     2018/11
+//--------------------------------------------------------------------------------------
+
+def prepare (boolean resetATP, boolean updateATP, String atpTag, String atpBranch)
+{
+    script {
         //---------------------------------------------------------------------------
         //        
         if (resetATP) {
@@ -28,17 +44,14 @@ def prepare (boolean resetATP, boolean updateATP, String atpTag, String atpBranc
         }
 
         if (updateATP) {            
-            if (atpTag != '' && atpBranch != '') {
+            
+            if (atpBranch.length() > 0) {
                 echo '**************************** ATP set tag *********'
-                bat 'atpTag ' + atrBranch + ' ' + atpTag
+                bat 'tagATP ' + atpBranch + ' ' + atpTag
             }
+
             echo '**************************** ATP update ********'
-            if (atpTag != '') {
-                bat 'updateATP.bat ' + atpTag
-            }
-            else {
-                bat 'updateATP.bat ' + atpBranch            
-            }
+            bat 'updateATP.bat ' + atpTag
         }
     }
 }
@@ -119,6 +132,8 @@ def checkResult ()
 def call (String coverageMode, String coverageReportType, boolean resetATP, boolean updateATP, String atpTag, String atpBranch, String atpPart)
  {
     script {
+        verifyParams (atpTag, atpBranch);
+
         prepare (resetATP, updateATP, atpTag, atpBranch);
         
         run1 (coverageMode, coverageReportType, atpPart);
