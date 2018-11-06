@@ -16,6 +16,8 @@ pipeline {
         booleanParam(name: 'wantBuild', defaultValue: false, description: 'Rebuild ABD')
         booleanParam(name: 'wantResetATP', defaultValue: false, description: 'clean ATP results and run full cycle')
         booleanParam(name: 'wantUpdateATP', defaultValue: false, description: 'update ATP database')
+        booleanParam(name: 'wantRepeatATP', defaultValue: true, description: 'twice ATP run to get failure logs')
+        string (name: 'atpPart', defaultValue: '', description: 'ATP part to run (blank to run all)')
         choice (name: 'coverageMode', choices: ['NoCoverage', 'AppendCoverage', 'RewriteCoverage', 'OnlyReportCoverage'], description: 'Select how to gerenate coverage data')
         choice (name: 'coverageReport', choices: ['NoReport', 'Cobertura', 'Html'], description: 'Coverage presentation data format')
         booleanParam(name: 'wantShutdown', defaultValue: false, description: 'hibernate the station when finished')
@@ -27,6 +29,9 @@ pipeline {
         stage ('bootstrap'){
             steps {
                 script {
+                    atp.verifyParams ('', '')
+                    print params
+
                     if (params.wantBootstrap) {
                         bat 'bootstrap.bat'
                     }
@@ -76,9 +81,41 @@ pipeline {
 
         //**************************************************************************
         //
+        /* 
+        //as single stage
         stage ('ATP'){
             steps {
-                atp params.coverageMode, params.coverageReport, params.wantResetATP, params.wantUpdateATP, '', '', ''
+                atp params.coverageMode, params.coverageReport, params.wantResetATP, params.wantUpdateATP, '', '', params.atpPart
+            }
+        }
+        */
+        //in multi stages
+
+        stage ('prepare tests') {
+            steps {                
+                script { atp.prepare (params.wantResetATP, params.wantUpdateATP, '', '') }
+            }
+        }
+
+        stage ('run#1') {
+            steps {
+                script { atp.run1 (params.coverageMode, params.coverageReport, params.atpPart) }
+            }
+        }
+
+        stage ('run#2') {
+            steps {
+                script {
+                    if (params.wantRepeatATP) {
+                        atp.run2 (params.atpPart)
+                    }
+                }
+            }
+        }
+
+        stage ('check result') {
+            steps {
+                script { atp.checkResult () }
             }
         }
     }
