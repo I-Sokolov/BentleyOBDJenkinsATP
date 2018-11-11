@@ -134,7 +134,7 @@ pipeline {
                 }
 
                 if (params.wantShutdown) {
-                    but 'shutdown /h'
+                    bat 'shutdown /h'
                 }
             }
         }
