@@ -22,7 +22,7 @@ pipeline {
         string(name: 'atpBranch', defaultValue: "${atp.getParam('atpBranch', 'ADBprg.atp', '')}", description: 'ATP branch or date, exaples -rBR_abd100400xx or -D"06 Mar 2018" (specify both tag and branch to set tag)')
         string(name: 'atpPart', defaultValue: '', description: 'ATP part to run (blank to run all)')
         booleanParam(name: 'fastRun', defaultValue: false, description: 'Only run one ATP cicle (no update test-case and double run)')
-        //booleanParam(name: 'shutDown', defaultValue: true, description: 'Hybernate as finished')
+        booleanParam(name: 'wantShutdown', defaultValue: false, description: 'hibernate the station when finished')
     }
 
     stages {        
@@ -118,11 +118,10 @@ pipeline {
                 catch (exc) {
                     echo 'Failed to send email: ' + exc
                 }
-                /*
-                if (params.shutDown) {
+
+                if (params.wantShutdown) {
                     bat 'shutdown /h'
-                }*/
-                
+                }                
             }
         }
     }
