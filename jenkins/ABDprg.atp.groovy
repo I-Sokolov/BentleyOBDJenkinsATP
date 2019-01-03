@@ -2,7 +2,7 @@
 |
 |     $Source: jenkins/ABDprg.atp.groovy $
 |
-|  $Copyright: (c) 2018 Bentley Systems, Incorporated. All rights reserved. $
+|  $Copyright: (c) 2019 Bentley Systems, Incorporated. All rights reserved. $
 |
 +--------------------------------------------------------------------------------------*/
 
@@ -86,15 +86,19 @@ pipeline {
 
         stage ('run#1') {
             steps {
-                script { atp.run1 ('NoCoverage', 'NoReport', params.atpPart) }
+                timeout(time: 30, unit: 'HOURS') {
+                    script { atp.run1 ('NoCoverage', 'NoReport', params.atpPart) }
+                }
             }
         }
 
         stage ('run#2') {
             steps {
-                script {
-                    if (!params.fastRun) {
-                        atp.run2 (params.atpPart)
+                timeout(time: 30, unit: 'HOURS') {
+                    script {
+                        if (!params.fastRun) {
+                            atp.run2 (params.atpPart)
+                        }
                     }
                 }
             }
