@@ -40,8 +40,8 @@ pipeline {
                     print params
 
                     if (!params.fastRun) {
-                        //clean Hg repos (before switch to buildingToday)
-                        bat 'bootstrap.bat BuildingIron'
+                        //well... clean Hg repos when switch to another team
+                        bat 'bootstrap.bat ABD10-11'
                     }
                     else {
                         echo 'skip bootstrap'
