@@ -11,7 +11,7 @@
 pipeline {
     agent any
     environment{
-       ABD_PATH	       = 'C:\\Program Files\\Bentley\\OpenBuildings CONNECT Edition\\Designer\\'
+       //set in Jenkins config, ABD_PATH	       = 'C:\\Program Files\\Bentley\\OpenBuildings CONNECT Edition\\Designer\\'
        PRG             = '1'
        SRCTREE_NAME    = 'ABD_prg'
        BUILDSTRATEGY   = 'Building'
