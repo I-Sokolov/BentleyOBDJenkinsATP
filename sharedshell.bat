@@ -7,3 +7,4 @@ CALL %BSISRC%bsicommon\shell\SharedShellEnv.bat
 :: Forcing the toolset to use VS2015 (which IS installed), and all that is dummy 
 :: anyway as PRG atp server does NOT build anything.
 SET BUILD_USING_VS2015=1
+set VS2015_WindowsSdkDir=c:\PROGRA~2\MICROS~3.0\SDK\
