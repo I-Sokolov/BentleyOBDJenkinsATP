@@ -41,7 +41,7 @@ pipeline {
 
                     if (!params.fastRun) {
                         //well... clean Hg repos when switch to another team
-                        bat 'bootstrap.bat ABD10-11'
+                        bat 'bootstrap.bat obd10-13'
                     }
                     else {
                         echo 'skip bootstrap'
