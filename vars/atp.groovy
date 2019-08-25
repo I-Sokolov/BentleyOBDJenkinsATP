@@ -115,12 +115,14 @@ def checkResult ()
     script {
         echo '**************************** ATP check errors **********************'
         def status = bat script: 'ATPhelper.bat GetAtpLogs ATP_ErrorLogs', returnStatus: true       
+        
+        archiveArtifacts 'ATP_ErrorLogs/*'
+        
         if (status == 0) {
             echo "ATP found no errors"
         }
         else if (status == 1) {
             currentBuild.result = 'UNSTABLE'
-            archiveArtifacts 'ATP_ErrorLogs/*'
         }
         else {
             echo "Checking for errors fails with status = " + status
