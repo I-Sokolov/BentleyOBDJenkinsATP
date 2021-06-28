@@ -86,7 +86,7 @@ pipeline {
 
         stage ('run#1') {
             steps {
-                timeout(time: 50, unit: 'HOURS') {
+                timeout(time: 100, unit: 'HOURS') {
                     script { atp.run1 ('NoCoverage', 'NoReport', params.atpPart) }
                 }
             }
@@ -94,7 +94,7 @@ pipeline {
 
         stage ('run#2') {
             steps {
-                timeout(time: 30, unit: 'HOURS') {
+                timeout(time: 50, unit: 'HOURS') {
                     script {
                         if (!params.fastRun) {
                             atp.run2 (params.atpPart)
