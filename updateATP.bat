@@ -7,7 +7,7 @@ if .%1==. set GETTAG=HEAD
 pushd %SrcRoot%Building\
 
 REM ----------------------------- update with subfolders and clean -C
-cvs -d :sspi:%CVS_USER%@atp-serv.bentley.com:/atp-root update  -A -P -d -C -r %GETTAG% atp/building/development
+git pull https://bentleycs@dev.azure.com/bentleycs/Facilities%20Engineering/_git/BuildingDev_ATPs 
 IF NOT "%ERRORLEVEL%" == "0" EXIT %ERRORLEVEL%
 
 popd
