@@ -2,7 +2,7 @@
 |
 |     $Source: vars/atp.groovy $
 |
-|  $Copyright: (c) 2019 Bentley Systems, Incorporated. All rights reserved. $
+|  $Copyright: (c) 2021 Bentley Systems, Incorporated. All rights reserved. $
 |
 +--------------------------------------------------------------------------------------*/
 import java.io.File
@@ -50,7 +50,7 @@ def prepare (boolean resetATP, boolean updateATP, String atpTag, String atpBranc
 
             if (atpBranch.length() > 0) {
                 echo '**************************** ATP set tag *********'
-                bat 'tagATP ' + atpBranch + ' ' + atpTag
+                //bat 'tagATP ' + atpBranch + ' ' + atpTag
             }
 
             echo '**************************** ATP update ********'
