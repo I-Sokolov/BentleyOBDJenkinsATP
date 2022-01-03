@@ -2,7 +2,7 @@
 |
 |     $Source: jenkins/ABDprg.atp.groovy $
 |
-|  $Copyright: (c) 2021 Bentley Systems, Incorporated. All rights reserved. $
+|  $Copyright: (c) 2022 Bentley Systems, Incorporated. All rights reserved. $
 |
 +--------------------------------------------------------------------------------------*/
 
@@ -41,7 +41,7 @@ pipeline {
 
                     if (!params.fastRun) {
                         //well... clean Hg repos when switch to another team
-                        bat 'bootstrap.bat obd10-16'
+                        bat 'bootstrap.bat obd10-16.2'
                     }
                     else {
                         echo 'skip bootstrap'
