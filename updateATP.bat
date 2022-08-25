@@ -8,7 +8,7 @@ pushd %SrcRoot%Building\
 
 REM ----------------------------- update with subfolders and clean
 
-pushd atp/building/development
+pushd atp\building\development
 dir .
 
 git reset --hard
@@ -19,7 +19,7 @@ IF NOT "%ERRORLEVEL%" == "0" EXIT %ERRORLEVEL%
 
 popd
 
-pushd atp/building/development/tfrfa
+pushd atp\building\development\tfrfa
 dir .
 
 git reset --hard
