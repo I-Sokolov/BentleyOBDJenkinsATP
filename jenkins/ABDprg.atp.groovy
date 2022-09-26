@@ -53,7 +53,7 @@ pipeline {
        
         //**************************************************************************
         //
-        stage ('pull OpenBuildings'){
+        stage ('pull script'){
             steps {
                 script {
                     if (!params.fastRun) {
