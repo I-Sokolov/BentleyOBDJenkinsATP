@@ -1,10 +1,11 @@
-call %~dp0sharedshell.bat
+call "%~dp0sharedshell.bat"
 @echo on
 
 set GETTAG=%1
 if .%1==. set GETTAG=HEAD
 
-pushd %SrcRoot%Building\
+pushd %SrcRoot%
+cd Building\
 
 REM ----------------------------- update with subfolders and clean
 

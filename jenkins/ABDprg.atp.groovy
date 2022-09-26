@@ -14,7 +14,7 @@ pipeline {
        //set in Jenkins config, ABD_PATH	       = 'C:\\Program Files\\Bentley\\OpenBuildings CONNECT Edition\\Designer\\'
        PRG             = '1'
        SRCTREE_NAME    = 'ABD_prg'
-       BUILDSTRATEGY   = 'Building'
+       BUILDSTRATEGY   = 'Building.PR'
     }
 
     parameters {
@@ -25,7 +25,7 @@ pipeline {
         //booleanParam(name: 'wantShutdown', defaultValue: false, description: 'hibernate the station when finished')
     }
 
-    stages {        
+    stages {        		
         //**************************************************************************
         //
         stage ('bootstrap'){
@@ -41,7 +41,7 @@ pipeline {
 
                     if (!params.fastRun) {
                         //well... clean Hg repos when switch to another team
-                            bat 'bootstrap.bat buildingazure' 
+                            bat 'bootstrap.bat building' 
 						//  bat 'bootstrap.bat obd10_16_2u1' -for U9.1
                     }
                     else {
@@ -50,14 +50,14 @@ pipeline {
                 }
             }
         }
-
+       
         //**************************************************************************
         //
-        stage ('pull script'){
+        stage ('pull OpenBuildings'){
             steps {
                 script {
                     if (!params.fastRun) {
-                        bat 'pullATP.bat'    
+                        bat 'pullOpenBuildings.bat'    
                     }
                     else {
                         echo 'skip pull scripts'
@@ -66,18 +66,6 @@ pipeline {
                 
             }
         }
-
-        //**************************************************************************
-        //
-        /* 
-        //as single stage
-        stage ('run ATP tests') {
-            steps {
-                atp 'NoCoverage', 'NoReport', !params.fastRun, !params.fastRun, params.atpTag, params.atpBranch, params.atpPart
-            }
-        }
-        */
-        //in multi stages
 
         stage ('prepare tests') {
             steps {                
@@ -112,6 +100,7 @@ pipeline {
         }
     }
 
+    /*
     post {
         always {
             script {
@@ -130,4 +119,5 @@ pipeline {
             }
         }
     }
+    */
 }

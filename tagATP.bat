@@ -1,4 +1,4 @@
-call %~dp0sharedshell.bat
+call "%~dp0sharedshell.bat"
 @echo on
 
 pushd %SrcRoot%Building\atp\building\development\

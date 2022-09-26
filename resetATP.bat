@@ -1,4 +1,4 @@
-call %~dp0sharedshell.bat
+call "%~dp0sharedshell.bat"
 
 @echo .
 @echo ************************* Clean ATP output **************
