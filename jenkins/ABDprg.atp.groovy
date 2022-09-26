@@ -28,6 +28,7 @@ pipeline {
     stages {        		
         //**************************************************************************
         //
+        /*
         stage ('bootstrap'){
             steps {
                 script {
@@ -92,7 +93,7 @@ pipeline {
                 }
             }
         }
-
+*/
         stage ('check result') {
             steps {
                 script { atp.checkResult () }
